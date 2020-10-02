@@ -22,8 +22,8 @@ routes.put('/classes', AccessTokenMiddleware, classesController.update);
 routes.get('/classes_by_filters', AccessTokenMiddleware, classesController.indexByFilters);
 routes.get('/classes', AccessTokenMiddleware, classesController.indexByUserPk)
 
-routes.post('/connections', connectionsController.create);
-routes.get('/connections', connectionsController.index);
+routes.post('/connections', AccessTokenMiddleware, connectionsController.create);
+routes.get('/connections', AccessTokenMiddleware, connectionsController.index);
 
 routes.post('/users', usersController.create);
 routes.get('/users', AccessTokenMiddleware, usersController.index)
