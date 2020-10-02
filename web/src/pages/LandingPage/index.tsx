@@ -35,13 +35,12 @@ const LandingPage: React.FC = () => {
   const [avatar, setAvatar] = useState('');
   const [name, setName] = useState("");
   const [last_name, setLastName] = useState('');
-  const { signOut } = authContext;
-  const { api } = authContext
+  const [totalConnections, setTotalConnections] = useState(0);
+  const { signOut, api } = authContext;
 
   useEffect(() => {
 
     (async () => {
-      console.log('tooo')
       const responseTeacher = await api.get(`/classes`);
 
       if (responseTeacher && responseTeacher.data) {
@@ -57,6 +56,14 @@ const LandingPage: React.FC = () => {
           setIsTeacher(true)
           setAvatar(dataTeacher.avatar)
         }
+      }
+
+      const responseConnections = await api.get('connections');
+
+      if (responseConnections && responseConnections.data) {
+        const dataConnections = responseConnections.data;
+
+        setTotalConnections(dataConnections.total)
       }
     })()
   }, [api])
@@ -104,7 +111,7 @@ const LandingPage: React.FC = () => {
           <Descriptions>
             <h3>Seja bem-vindo.<br /><span>O que deseja fazer?</span></h3>
             <TotalConnections>
-              18 conexões já realizadas
+              {totalConnections === 1 ? `${totalConnections} conexão já realizada` : `${totalConnections} conexões já realizadas`}
               <img src={purpleHeartIcon} alt="Coração roxo" />
             </TotalConnections>
           </Descriptions>

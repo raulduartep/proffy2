@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import whatsappIcon from "../../assets/images/icons/whatsapp.svg";
 import userNotFoundImage from '../../assets/images/user_not_found.jpg';
+import AuthContext from '../../contexts/auth';
 
 import { Container, Schedule, Schedules, Avatar } from './styles';
 
@@ -29,11 +30,12 @@ interface ClasseItemProps {
 
 const ClasseItem: React.FC<ClasseItemProps> = ({ classe }) => {
 
-  function createNewConnection() {
-
-  }
-
   const days = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
+  const { api } = useContext(AuthContext);
+
+  async function createNewConnection() {
+    await api.post('connections')
+  }
 
   return (
     <Container>

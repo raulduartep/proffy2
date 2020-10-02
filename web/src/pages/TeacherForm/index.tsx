@@ -105,30 +105,24 @@ const TeacherForm: React.FC = () => {
   }
 
   useEffect(() => {
-    (async () => {
-      const responseClasses = await api.get(`/classes`);
-      const responseUser = await api.get('/users');
+    api.get(`/classes`).then(response => {
+      const classesData = response.data;
 
-      if (responseUser && responseUser.data) {
-        const userData = responseUser.data;
+      setSubject(classesData.subject);
+      setCost(classesData.cost);
+      setScheduleItems(classesData.schedules);
+      setAvatar(classesData.avatar);
+      setBio(classesData.bio);
+      setWhatsapp(classesData.whatsapp);
+      setIsTeacher(classesData.true)
+    });
 
-        setName(userData.name);
-        setLastName(userData.last_name);
-      }
+    api.get('/users').then(response => {
+      const userData = response.data;
 
-      if (responseClasses && responseClasses.data) {
-        const classesData = responseClasses.data;
-
-        setSubject(classesData.subject);
-        setCost(classesData.cost);
-        setScheduleItems(classesData.schedules);
-        setAvatar(classesData.avatar);
-        setBio(classesData.bio);
-        setWhatsapp(classesData.whatsapp);
-        setIsTeacher(classesData.true)
-      }
-    }
-    )()
+      setName(userData.name);
+      setLastName(userData.last_name);
+    });
   }, [api])
 
   if (registed) {
