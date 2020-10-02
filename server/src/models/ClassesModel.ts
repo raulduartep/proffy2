@@ -151,29 +151,34 @@ export default {
         ])
         .first()
 
-      const classesWithSchedule: Array<ScheduleItem> = await db('class_schedule')
-        .where('class_id', classe.id)
-        .select('*')
+      if (classe) {
+        const classesWithSchedule: Array<ScheduleItem> = await db('class_schedule')
+          .where('class_id', classe.id)
+          .select('*')
 
-      const schedulesConvertedHours = classesWithSchedule.map(schedule => {
+        const schedulesConvertedHours = classesWithSchedule.map(schedule => {
 
-        const { week_day, from, to } = schedule;
+          const { week_day, from, to } = schedule;
 
-        const fromConverted = moment.utc(moment.duration(from, 'm').asMilliseconds()).format('HH:mm')
-        const toConverted = moment.utc(moment.duration(to, 'm').asMilliseconds()).format('HH:mm')
+          const fromConverted = moment.utc(moment.duration(from, 'm').asMilliseconds()).format('HH:mm')
+          const toConverted = moment.utc(moment.duration(to, 'm').asMilliseconds()).format('HH:mm')
+
+          return {
+            week_day: week_day.toString(),
+            from: fromConverted,
+            to: toConverted
+          }
+        })
 
         return {
-          week_day: week_day.toString(),
-          from: fromConverted,
-          to: toConverted
+          ...classe,
+          schedules: schedulesConvertedHours
         }
-      })
-
-      return {
-        ...classe,
-        schedules: schedulesConvertedHours
       }
+
+      throw new Error('No classes')
     } catch (err) {
+      console.log(err)
       throw new Error('Unexpected error while search classes')
     }
   },
